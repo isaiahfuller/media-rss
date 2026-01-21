@@ -2,15 +2,40 @@
 
 import { useEffect, useState } from 'react';
 import { Button, Group, TextInput } from '@mantine/core';
+import { getAnilistId, getAnilistList } from '@/lib/anilist';
+import { getMalList } from '@/lib/mal';
 import { createClient } from '@/lib/supabase/client';
 
 export default function Source({ source }: { source: string[] }) {
-  const [username, setUsername] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState<string>('');
+  const [externalId, setExternalId] = useState<number | null>(null); // Out of currently planned sources, only anilist uses ids
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     getValue();
   }, []);
+
+  useEffect(() => {
+    switch (source[0]) {
+      case 'anilist': {
+        if (externalId) {
+          getAnilistList(externalId);
+        }
+        break;
+      }
+      case 'myanimelist': {
+        break;
+      }
+      case 'lastfm': {
+        break;
+      }
+      case 'trakt': {
+        break;
+      }
+      default:
+        break;
+    }
+  }, [externalId, username]);
 
   async function getValue() {
     setLoading(true);
@@ -27,6 +52,15 @@ export default function Source({ source }: { source: string[] }) {
       .eq('user_id', user.id);
     if (data && data.length) {
       setUsername(data[0].external_name);
+      switch (source[0]) {
+        case 'anilist': {
+          setExternalId(data[0].external_id);
+          await getAnilistList(data[0].external_id);
+          break;
+        }
+        default:
+          break;
+      }
     }
     setLoading(false);
   }
@@ -57,29 +91,15 @@ export default function Source({ source }: { source: string[] }) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const supabase = await createClient();
     setLoading(true);
     switch (source[0]) {
       case 'anilist': {
-        const {
-          data: { id },
-        } = await supabase.functions.invoke('get-anilist-id', {
-          body: {
-            username,
-          },
-        });
+        const id = await getAnilistId(username);
         insertValue(id, username);
         break;
       }
       case 'myanimelist': {
-        const { error } = await supabase.functions.invoke('mal-list', {
-          body: {
-            username,
-          },
-        });
-        if (error) {
-          return;
-        }
+        await getMalList(username);
         insertValue(-1, username);
         break;
       }

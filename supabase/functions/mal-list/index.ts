@@ -1,9 +1,6 @@
 // Setup type definitions for built-in Supabase Runtime APIs
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-export const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type'
-};
+import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
+import { corsHeaders } from '../_shared/cors.ts';
 const url = 'https://api.myanimelist.net/v2';
 const requestHeaders = new Headers();
 requestHeaders.set('X-MAL-CLIENT-ID', Deno.env.get('MAL_CLIENT_ID'));
@@ -20,15 +17,15 @@ Deno.serve(async (req)=>{
       headers: requestHeaders
     });
     const data = await response.json();
-    return new Response(JSON.stringify(data), {
+    return new Response(JSON.stringify(data?.data), {
       headers: {
         ...corsHeaders,
         'Content-Type': 'application/json',
-        'Connection': 'keep-alive'
+        Connection: 'keep-alive'
       }
     });
   } catch (e) {
-    return new Response("Internal Server Error", {
+    return new Response('Internal Server Error', {
       status: 500
     });
   }
