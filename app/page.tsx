@@ -1,11 +1,10 @@
-import { ColorSchemeToggle } from '../components/ColorSchemeToggle/ColorSchemeToggle';
-import { Welcome } from '../components/Welcome/Welcome';
+import Navbar from '@/components/Navbar/Navbar';
 
 export default function HomePage() {
   return (
     <>
-      <Welcome />
-      <ColorSchemeToggle />
+      <Navbar />
+      <h1>Home</h1>
     </>
   );
 }

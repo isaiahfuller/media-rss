@@ -1,8 +1,12 @@
 import '@mantine/core/styles.css';
 
-import React from 'react';
+import { config } from '@fortawesome/fontawesome-svg-core';
 import { ColorSchemeScript, mantineHtmlProps, MantineProvider } from '@mantine/core';
 import { theme } from '../theme';
+
+import '@fortawesome/fontawesome-svg-core/styles.css';
+
+config.autoAddCss = false;
 
 export const metadata = {
   title: 'Mantine Next.js template',
