@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Burger, Flex, Group, Menu, NavLink, Text } from '@mantine/core';
+import { Anchor, Burger, Flex, Group, Menu, NavLink, Text } from '@mantine/core';
 import { useDisclosure, useViewportSize } from '@mantine/hooks';
 import AniList from '@/img/AniList.svg';
 import Lastfm from '@/img/Lastfm.svg';
@@ -49,20 +49,28 @@ export default function Navbar() {
                 <Menu.Item
                   leftSection={<Image src={Lastfm} alt="Last.fm" width={20} height={20} />}
                 >
-                  <Link href="/source/lastfm">Last.fm</Link>
+                  <Anchor component={Link} href="/source/lastfm" c="inherit">
+                    Last.fm
+                  </Anchor>
                 </Menu.Item>
                 <Menu.Item
                   leftSection={<Image src={AniList} alt="AniList" width={20} height={20} />}
                 >
-                  <Link href="/source/anilist">AniList</Link>
+                  <Anchor component={Link} href="/source/anilist" c="inherit">
+                    AniList
+                  </Anchor>
                 </Menu.Item>
                 <Menu.Item
                   leftSection={<Image src={MyAnimeList} alt="MyAnimeList" width={20} height={20} />}
                 >
-                  <Link href="/source/myanimelist">MyAnimeList</Link>
+                  <Anchor component={Link} href="/source/myanimelist" c="inherit">
+                    MyAnimeList
+                  </Anchor>
                 </Menu.Item>
                 <Menu.Item leftSection={<Image src={Trakt} alt="Trakt" width={20} height={20} />}>
-                  <Link href="/source/trakt">Trakt</Link>
+                  <Anchor component={Link} href="/source/trakt" c="inherit">
+                    Trakt
+                  </Anchor>
                 </Menu.Item>
               </Menu.Dropdown>
             </Menu>
