@@ -1,8 +1,13 @@
-/* eslint-disable no-console */
 // Setup type definitions for built-in Supabase Runtime APIs
+import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
+
+import { createClient } from 'npm:@supabase/supabase-js@2';
 import { corsHeaders } from '../_shared/cors.ts';
 
-import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
+const supabase = createClient(
+  Deno.env.get('SUPABASE_URL'),
+  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+);
 
 console.info('server started');
 Deno.serve(async (req) => {
@@ -10,6 +15,18 @@ Deno.serve(async (req) => {
     return new Response('ok', {
       headers: corsHeaders,
     });
+  }
+  const authHeader = req.headers.get('Authorization')!;
+
+  const token = authHeader.replace('Bearer ', '');
+  const { data, error } = await supabase.auth.getClaims(token);
+  if (error) {
+    return Response.json(
+      { msg: 'Invalid JWT' },
+      {
+        status: 401,
+      }
+    );
   }
   const { username } = await req.json();
   const userQuery = `

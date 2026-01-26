@@ -1,13 +1,13 @@
+import { GlobalList } from '@/interfaces/globalList';
 import { createClient } from '@/lib/supabase/client';
 
-export async function getMalList(username: string) {
+export async function getMalList(username: string): Promise<GlobalList> {
   const supabase = createClient();
-  const {
-    data: { list },
-  } = await supabase.functions.invoke('mal-list', {
+  const { data } = await supabase.functions.invoke('mal-list', {
     body: {
       username,
     },
   });
-  return list;
+  console.log('data', data);
+  return data;
 }
