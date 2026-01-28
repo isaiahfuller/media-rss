@@ -34,6 +34,7 @@ Deno.serve(async (req) => {
   }
   try {
     const { username } = await req.json();
+    console.log('username', username);
     const response = await fetch(
       `${url}/users/${username}/animelist?sort=list_updated_at&fields=main_picture,title,list_status,media_type`,
       {
@@ -67,6 +68,7 @@ function formatList(data) {
         title: item.node?.title,
         image: item.node?.main_picture?.medium || null,
         timestamp: Date.parse(item.list_status?.updated_at),
+        url: 'https://myanimelist.net/anime/' + item.node?.id,
       };
     }),
   };

@@ -3,6 +3,8 @@ import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
 
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { corsHeaders } from '../_shared/cors.ts';
+import { GlobalList } from '../_shared/interfaces.ts';
+import mapFormat from '../_shared/mapFormat.ts';
 
 const supabase = createClient(
   Deno.env.get('SUPABASE_URL'),
@@ -10,7 +12,7 @@ const supabase = createClient(
 );
 
 console.info('server started');
-Deno.serve(async (req) => {
+Deno.serve(async (req: any) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', {
       headers: corsHeaders,
@@ -29,13 +31,13 @@ Deno.serve(async (req) => {
     );
   }
   const { id } = await req.json();
-  console.log('id', id);
   const query = `
     {
       Page(perPage: 20, page: 1) {
         activities(userId: ${id}, type: MEDIA_LIST, sort: ID_DESC) {
           ... on ListActivity {
             media {
+              id
               siteUrl
               title {
                 userPreferred
@@ -45,10 +47,20 @@ Deno.serve(async (req) => {
                 color
                 large
               }
+              format
               isAdult
+              staff {
+                edges {
+                  role
+                  node {
+                    name {
+                      full
+                    }
+                  }
+                }
+              }
             }
             id
-            type
             createdAt
           }
         }
@@ -68,16 +80,33 @@ Deno.serve(async (req) => {
   };
   const response = await fetch(url, options);
   const result = await response.json();
-  return new Response(
-    JSON.stringify({
-      list: result.data.Page.activities,
-    }),
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        Connection: 'keep-alive',
-        ...corsHeaders,
-      },
-    }
-  );
+  return new Response(JSON.stringify(formatList(result.data.Page.activities)), {
+    headers: {
+      'Content-Type': 'application/json',
+      Connection: 'keep-alive',
+      ...corsHeaders,
+    },
+  });
 });
+
+function formatList(data: any) {
+  console.log('data', data);
+  const res: GlobalList = {
+    service: 'anilist',
+    list: data.map((item: any) => {
+      console.log(item.media?.staff?.edges);
+      const artist = item.media?.staff?.edges?.find((edge: any) => edge.role.startsWith('Story'))
+        ?.node?.name?.full;
+      return {
+        type: mapFormat(item.media?.format),
+        id: item.media?.id,
+        title: item.media?.title?.userPreferred,
+        image: item.media?.coverImage?.large || null,
+        timestamp: item.createdAt * 1000,
+        url: item.media?.siteUrl,
+        artist: artist,
+      };
+    }),
+  };
+  return res;
+}

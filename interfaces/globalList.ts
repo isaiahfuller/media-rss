@@ -1,13 +1,13 @@
 export interface GlobalList {
   service: string;
   list: {
-    type: 'TV' | 'Movie' | 'Music';
+    type: 'tv' | 'movie' | 'music' | 'print';
     id?: number;
     url?: string;
     title: string;
     image?: string;
     artist?: string;
     album?: string;
-    timestamp?: Date;
+    timestamp: number;
   }[];
 }

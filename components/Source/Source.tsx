@@ -2,14 +2,25 @@
 
 import { useEffect, useState } from 'react';
 import { Button, Group, TextInput } from '@mantine/core';
-import { getAnilistId, getAnilistList } from '@/lib/anilist';
-import { getMalList } from '@/lib/mal';
+import { GlobalList } from '@/interfaces/globalList';
 import { createClient } from '@/lib/supabase/client';
+import List from '../List/List';
 
-export default function Source({ source }: { source: string[] }) {
+export default function Source({
+  source,
+  getMalList,
+  getAnilistId,
+  getAnilistList,
+}: {
+  source: string[];
+  getMalList: (username: string) => Promise<GlobalList>;
+  getAnilistId: (username: string) => Promise<number>;
+  getAnilistList: (id: number) => Promise<GlobalList>;
+}) {
   const [username, setUsername] = useState<string>('');
   const [externalId, setExternalId] = useState<number | null>(null); // Out of currently planned sources, only anilist uses ids
   const [loading, setLoading] = useState<boolean>(false);
+  const [list, setList] = useState<GlobalList | null>(null);
 
   useEffect(() => {
     getValue();
@@ -55,7 +66,13 @@ export default function Source({ source }: { source: string[] }) {
       switch (source[0]) {
         case 'anilist': {
           setExternalId(data[0].external_id);
-          await getAnilistList(data[0].external_id);
+          const list = await getAnilistList(data[0].external_id);
+          setList(list);
+          break;
+        }
+        case 'myanimelist': {
+          const list = await getMalList(data[0].external_name);
+          setList(list);
           break;
         }
         default:
@@ -95,6 +112,7 @@ export default function Source({ source }: { source: string[] }) {
     switch (source[0]) {
       case 'anilist': {
         const id = await getAnilistId(username);
+        await getAnilistList(id);
         insertValue(id, username);
         break;
       }
@@ -125,6 +143,7 @@ export default function Source({ source }: { source: string[] }) {
           </Button>
         </Group>
       </form>
+      {list && <List list={list} />}
     </>
   );
 }
