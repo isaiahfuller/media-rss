@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Button, Group, TextInput } from '@mantine/core';
+import { Button, Center, Divider, Group, Loader, Stack, TextInput } from '@mantine/core';
 import { GlobalList } from '@/interfaces/globalList';
 import { createClient } from '@/lib/supabase/client';
 import List from '../List/List';
@@ -128,22 +128,33 @@ export default function Source({
   }
 
   return (
-    <>
+    <Stack>
       <form onSubmit={handleSubmit}>
         <h1>Source: {source}</h1>
-        <Group align="flex-end">
-          <TextInput
-            placeholder="Enter your username"
-            label="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <Button loading={loading} type="submit">
-            Submit
-          </Button>
-        </Group>
+        <Center>
+          <Group align="flex-end">
+            <TextInput
+              placeholder="Enter your username"
+              label="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <Button loading={loading} type="submit">
+              Submit
+            </Button>
+          </Group>
+        </Center>
       </form>
-      {list && <List list={list} />}
-    </>
+      {list || username ? <Divider /> : null}
+      <Center>
+        {list ? (
+          <>
+            <List list={list} />
+          </>
+        ) : username ? (
+          <Loader />
+        ) : null}
+      </Center>
+    </Stack>
   );
 }
