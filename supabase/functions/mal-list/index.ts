@@ -4,6 +4,7 @@ import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { corsHeaders } from '../_shared/cors.ts';
 import { GlobalList } from '../_shared/interfaces.ts';
+import mapFormat from '../_shared/mapFormat.ts';
 
 const supabase = createClient(
   Deno.env.get('SUPABASE_URL'),
@@ -63,7 +64,7 @@ function formatList(data) {
     service: 'myanimelist',
     list: data.map((item) => {
       return {
-        type: item.node?.media_type,
+        type: mapFormat(item.node?.media_type.toUpperCase()),
         id: item.node?.id,
         title: item.node?.title,
         image: item.node?.main_picture?.medium || null,
