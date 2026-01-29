@@ -26,28 +26,6 @@ export default function Source({
     getValue();
   }, []);
 
-  useEffect(() => {
-    switch (source[0]) {
-      case 'anilist': {
-        if (externalId) {
-          getAnilistList(externalId);
-        }
-        break;
-      }
-      case 'myanimelist': {
-        break;
-      }
-      case 'lastfm': {
-        break;
-      }
-      case 'trakt': {
-        break;
-      }
-      default:
-        break;
-    }
-  }, [externalId, username]);
-
   async function getValue() {
     setLoading(true);
     const supabase = await createClient();
@@ -66,11 +44,13 @@ export default function Source({
       switch (source[0]) {
         case 'anilist': {
           setExternalId(data[0].external_id);
+          setList(null);
           const list = await getAnilistList(data[0].external_id);
           setList(list);
           break;
         }
         case 'myanimelist': {
+          setList(null);
           const list = await getMalList(data[0].external_name);
           setList(list);
           break;
@@ -112,13 +92,17 @@ export default function Source({
     switch (source[0]) {
       case 'anilist': {
         const id = await getAnilistId(username);
-        await getAnilistList(id);
         insertValue(id, username);
+        setList(null);
+        const newList = await getAnilistList(id);
+        setList(newList);
         break;
       }
       case 'myanimelist': {
-        await getMalList(username);
         insertValue(-1, username);
+        setList(null);
+        const newList = await getMalList(username);
+        setList(newList);
         break;
       }
       default:
