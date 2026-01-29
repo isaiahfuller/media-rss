@@ -36,15 +36,27 @@ Deno.serve(async (req) => {
   try {
     const { username } = await req.json();
     console.log('username', username);
-    const response = await fetch(
+    const animeResponse = await fetch(
       `${url}/users/${username}/animelist?sort=list_updated_at&fields=main_picture,title,list_status,media_type`,
       {
         headers: requestHeaders,
       }
     );
-    const data = await response.json();
-    const formattedList = formatList(data?.data);
-    return new Response(JSON.stringify(formattedList), {
+    const animeData = await animeResponse.json();
+    const formattedAnimeList = formatList(animeData?.data);
+    const mangaResponse = await fetch(
+      `${url}/users/${username}/mangalist?sort=list_updated_at&fields=main_picture,title,list_status,media_type`,
+      {
+        headers: requestHeaders,
+      }
+    );
+    const mangaData = await mangaResponse.json();
+    const formattedMangaList = formatList(mangaData?.data, 'manga');
+    const mergedList = [...formattedAnimeList.list, ...formattedMangaList.list].sort(
+      (a, b) => b.timestamp - a.timestamp
+    );
+
+    return new Response(JSON.stringify({ service: 'myanimelist', list: mergedList }), {
       headers: {
         ...corsHeaders,
         'Content-Type': 'application/json',
@@ -58,7 +70,7 @@ Deno.serve(async (req) => {
   }
 });
 
-function formatList(data) {
+function formatList(data, type = 'anime') {
   console.log('data', data);
   const res: GlobalList = {
     service: 'myanimelist',
@@ -69,7 +81,7 @@ function formatList(data) {
         title: item.node?.title,
         image: item.node?.main_picture?.medium || null,
         timestamp: Date.parse(item.list_status?.updated_at),
-        url: 'https://myanimelist.net/anime/' + item.node?.id,
+        url: `https://myanimelist.net/${type}/${item.node?.id}`,
       };
     }),
   };
