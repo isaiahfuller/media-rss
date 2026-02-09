@@ -18,6 +18,7 @@ export default function Source({
   getAnilistList: (id: number) => Promise<GlobalList>;
 }) {
   const [username, setUsername] = useState<string>('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [externalId, setExternalId] = useState<number | null>(null); // Out of currently planned sources, only anilist uses ids
   const [loading, setLoading] = useState<boolean>(false);
   const [list, setList] = useState<GlobalList | null>(null);
