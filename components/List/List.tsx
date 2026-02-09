@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { faBook, faCalendar, faQuestion, faTv, faVideo } from '@fortawesome/free-solid-svg-icons';

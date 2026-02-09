@@ -36,6 +36,7 @@ export default function Navbar() {
           direction={{ base: 'column', sm: 'row' }}
           align={{ base: 'flex-start', sm: 'center' }}
         >
+          <NavLink component={Link} href="/" variant="subtle" label="Home" />
           {width >= 768 ? (
             <Menu trigger="hover" openDelay={100} closeDelay={400}>
               <Menu.Target>
