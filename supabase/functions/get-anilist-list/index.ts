@@ -90,11 +90,9 @@ Deno.serve(async (req: any) => {
 });
 
 function formatList(data: any) {
-  console.log('data', data);
   const res: GlobalList = {
     service: 'anilist',
     list: data.map((item: any) => {
-      console.log(item.media?.staff?.edges);
       const artist = item.media?.staff?.edges?.find((edge: any) => edge.role.startsWith('Story'))
         ?.node?.name?.full;
       return {

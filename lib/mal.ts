@@ -13,6 +13,5 @@ export async function getMalList(username: string): Promise<GlobalList> {
     throw error || new Error('No data');
   }
 
-  console.log('data', data);
   return data;
 }

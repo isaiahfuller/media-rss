@@ -35,7 +35,6 @@ Deno.serve(async (req) => {
   }
   try {
     const { username } = await req.json();
-    console.log('username', username);
     const animeResponse = await fetch(
       `${url}/users/${username}/animelist?sort=list_updated_at&fields=main_picture,title,list_status,media_type`,
       {
@@ -71,7 +70,6 @@ Deno.serve(async (req) => {
 });
 
 function formatList(data, type = 'anime') {
-  console.log('data', data);
   const res: GlobalList = {
     service: 'myanimelist',
     list: data.map((item) => {

@@ -10,7 +10,6 @@ export async function getAnilistId(username: string) {
       username,
     },
   });
-  console.log('data', id);
   return id;
 }
 
@@ -26,6 +25,5 @@ export async function getAnilistList(id: number): Promise<GlobalList> {
     throw error || new Error('No data');
   }
 
-  console.log('data', data);
   return data;
 }
