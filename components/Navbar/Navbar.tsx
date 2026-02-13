@@ -68,11 +68,6 @@ export default function Navbar() {
                     MyAnimeList
                   </Anchor>
                 </Menu.Item>
-                <Menu.Item leftSection={<Image src={Trakt} alt="Trakt" width={20} height={20} />}>
-                  <Anchor component={Link} href="/source/trakt" c="inherit">
-                    Trakt
-                  </Anchor>
-                </Menu.Item>
               </Menu.Dropdown>
             </Menu>
           ) : (
