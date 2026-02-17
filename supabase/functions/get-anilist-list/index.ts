@@ -99,7 +99,6 @@ function formatList(data: any) {
       const type = mapFormat(item.media?.format);
       const status = mapStatus(item.status.toUpperCase());
       const album = ['watching', 'reading', 'completed', 'on_hold'].includes(status) ? type === 'print' ? `${item.progress} chapters` : `${item.progress} episodes` : null
-      console.log(item)
       return {
         type,
         id: item.media?.id,
