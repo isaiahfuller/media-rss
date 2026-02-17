@@ -5,6 +5,7 @@ import { createClient } from 'npm:@supabase/supabase-js@2';
 import { corsHeaders } from '../_shared/cors.ts';
 import { GlobalList } from '../_shared/interfaces.ts';
 import mapFormat from '../_shared/mapFormat.ts';
+import mapStatus from '../_shared/mapStatus.ts';
 
 const supabase = createClient(
   Deno.env.get('SUPABASE_URL'),
@@ -73,13 +74,16 @@ function formatList(data, type = 'anime') {
   const res: GlobalList = {
     service: 'myanimelist',
     list: data.map((item) => {
+      const type = mapFormat(item.node?.media_type.toUpperCase())
       return {
-        type: mapFormat(item.node?.media_type.toUpperCase()),
+        type,
         id: item.node?.id,
         title: item.node?.title,
         image: item.node?.main_picture?.medium || null,
         timestamp: Date.parse(item.list_status?.updated_at),
         url: `https://myanimelist.net/${type}/${item.node?.id}`,
+        status: mapStatus(item.list_status?.status.toUpperCase()),
+        album: type === 'print' ? `${item.list_status?.num_chapters_read} chapters` : `${item.list_status?.num_episodes_watched} episodes`,
       };
     }),
   };

@@ -9,5 +9,6 @@ export interface GlobalList {
     artist?: string;
     album?: string;
     timestamp: number;
+    status?: string;
   }[];
 }
