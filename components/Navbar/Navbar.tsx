@@ -93,13 +93,6 @@ export default function Navbar() {
                 label="MyAnimeList"
                 leftSection={<Image src={MyAnimeList} alt="MyAnimeList" width={20} height={20} />}
               />
-              <NavLink
-                component={Link}
-                href="/source/trakt"
-                variant="subtle"
-                label="Trakt"
-                leftSection={<Image src={Trakt} alt="Trakt" width={20} height={20} />}
-              />
             </>
           )}
           <NavLink variant="subtle" label="Filters" />
