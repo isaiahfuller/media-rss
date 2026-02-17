@@ -75,6 +75,8 @@ function formatList(data, type = 'anime') {
     service: 'myanimelist',
     list: data.map((item) => {
       const type = mapFormat(item.node?.media_type.toUpperCase())
+      const status = mapStatus(item.list_status?.status.toUpperCase())
+      const album = ['watching', 'reading', 'completed', 'on_hold'].includes(status) ? type === 'print' ? `${item.list_status?.num_chapters_read} chapters` : `${item.list_status?.num_episodes_watched} episodes` : null
       return {
         type,
         id: item.node?.id,
@@ -82,8 +84,8 @@ function formatList(data, type = 'anime') {
         image: item.node?.main_picture?.medium || null,
         timestamp: Date.parse(item.list_status?.updated_at),
         url: `https://myanimelist.net/${type}/${item.node?.id}`,
-        status: mapStatus(item.list_status?.status.toUpperCase()),
-        album: type === 'print' ? `${item.list_status?.num_chapters_read} chapters` : `${item.list_status?.num_episodes_watched} episodes`,
+        status,
+        album,
       };
     }),
   };

@@ -5,6 +5,7 @@ import { createClient } from 'npm:@supabase/supabase-js@2';
 import { corsHeaders } from '../_shared/cors.ts';
 import { GlobalList } from '../_shared/interfaces.ts';
 import mapFormat from '../_shared/mapFormat.ts';
+import mapStatus from '../_shared/mapStatus.ts';
 
 const supabase = createClient(
   Deno.env.get('SUPABASE_URL'),
@@ -62,6 +63,8 @@ Deno.serve(async (req: any) => {
             }
             id
             createdAt
+            status
+            progress
           }
         }
       }
@@ -93,16 +96,19 @@ function formatList(data: any) {
   const res: GlobalList = {
     service: 'anilist',
     list: data.map((item: any) => {
-      const artist = item.media?.staff?.edges?.find((edge: any) => edge.role.startsWith('Story'))
-        ?.node?.name?.full;
+      const type = mapFormat(item.media?.format);
+      const status = mapStatus(item.status.toUpperCase());
+      const album = ['watching', 'reading', 'completed', 'on_hold'].includes(status) ? type === 'print' ? `${item.progress} chapters` : `${item.progress} episodes` : null
+      console.log(item)
       return {
-        type: mapFormat(item.media?.format),
+        type,
         id: item.media?.id,
         title: item.media?.title?.userPreferred,
         image: item.media?.coverImage?.large || null,
         timestamp: item.createdAt * 1000,
         url: item.media?.siteUrl,
-        artist: artist,
+        status,
+        album,
       };
     }),
   };
