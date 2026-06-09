@@ -13,7 +13,7 @@ export default async function SourcePage({ params }: { params: Promise<{ source:
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) {
-    return redirect('/media-rss/login');
+    return redirect('/login');
   }
 
   async function _getMalList(username: string) {

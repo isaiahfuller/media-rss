@@ -2,7 +2,7 @@ import '@mantine/core/styles.css';
 
 import { config } from '@fortawesome/fontawesome-svg-core';
 import { ColorSchemeScript, mantineHtmlProps, MantineProvider } from '@mantine/core';
-import { theme } from '@/theme';
+import { theme } from '../theme';
 
 import '@fortawesome/fontawesome-svg-core/styles.css';
 

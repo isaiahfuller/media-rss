@@ -67,6 +67,6 @@ describe('Navbar', () => {
     fireEvent.click(logoutBtn);
 
     expect(mockSignOut).toHaveBeenCalled();
-    expect(redirect).toHaveBeenCalledWith('/media-rss/login');
+    expect(redirect).toHaveBeenCalledWith('/login');
   });
 });

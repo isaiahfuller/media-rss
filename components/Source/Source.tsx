@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Button, Center, Divider, Group, Loader, Stack, TextInput } from '@mantine/core';
 import { GlobalList } from '@/interfaces/globalList';
 import { createClient } from '@/lib/supabase/client';
-import List from '@/components/List/List';
+import List from '../List/List';
 
 export default function Source({
   source,

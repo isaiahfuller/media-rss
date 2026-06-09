@@ -39,13 +39,13 @@ export async function updateSession(request: NextRequest) {
 
   if (
     !user &&
-    !request.nextUrl.pathname.startsWith('/media-rss/login') &&
-    !request.nextUrl.pathname.startsWith('/media-rss/auth') &&
-    !request.nextUrl.pathname.startsWith('/media-rss/feed')
+    !request.nextUrl.pathname.startsWith('/login') &&
+    !request.nextUrl.pathname.startsWith('/auth') &&
+    !request.nextUrl.pathname.startsWith('/feed')
   ) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone()
-    url.pathname = '/media-rss/login'
+    url.pathname = '/login'
     return NextResponse.redirect(url)
   }
 
