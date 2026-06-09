@@ -95,7 +95,6 @@ export default function Navbar() {
               />
             </>
           )}
-          <NavLink variant="subtle" label="Filters" />
         </Flex>
         {/* Right/Bottom */}
         <Flex

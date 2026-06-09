@@ -3,16 +3,16 @@ import { Feed } from 'feed';
 import getCombinedList from '@/lib/getCombinedList';
 import { createClient } from '@/lib/supabase/server';
 
-export async function GET(_req: NextRequest, { params }: { params: { id: string; type: string } }) {
-  const { id, type } = await params;
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
-    await supabase.auth.signInAnonymously();
-  }
-  const list = await getCombinedList(id);
+export function GET(_req: NextRequest, context: { params: Promise<{ id: string; type: string }> }) {
+  return context.params.then(async ({ id, type }) => {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      await supabase.auth.signInAnonymously();
+    }
+    const list = await getCombinedList(id);
   const feed = new Feed({
     title: 'Media Tracker',
     description: 'Media Tracker',
@@ -58,4 +58,5 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string;
     return NextResponse.json(list, { headers: { 'Content-Type': 'application/json' } });
   }
   return new NextResponse(feed.rss2(), { headers: { 'Content-Type': 'application/rss+xml' } });
+  });
 }
