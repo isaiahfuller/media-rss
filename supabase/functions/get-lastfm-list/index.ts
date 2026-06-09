@@ -37,7 +37,6 @@ Deno.serve(async (req) => {
     const lfmResponse = await fetch(url);
     const lfmData = await lfmResponse.json();
     const formattedList = formatList(lfmData?.recenttracks?.track);
-    console.log(formattedList)
 
     return new Response(JSON.stringify(formattedList), {
       headers: {
@@ -67,6 +66,7 @@ function formatList(data, type = 'music') {
         image: item.image[1]["#text"] || null,
         timestamp: item.date.uts * 1000,
         url: item.url,
+        artist: item.artist["#text"],
         status,
         album,
       };
