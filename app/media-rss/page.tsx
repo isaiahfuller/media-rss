@@ -13,7 +13,7 @@ export default async function HomePage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return redirect('/login');
+    return redirect('/media-rss/login');
   }
 
   const list = await getCombinedList(user.id);

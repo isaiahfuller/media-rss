@@ -108,7 +108,7 @@ export default function Navbar() {
             onClick={() => {
               const supabase = createClient();
               supabase.auth.signOut();
-              redirect('/login');
+              redirect('/media-rss/login');
             }}
           />
         </Flex>

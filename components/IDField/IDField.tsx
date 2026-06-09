@@ -17,10 +17,10 @@ export default function IDField({ id }: { id: string }) {
   return (
     <>
       <TextInput
-        value={`${pathname}/feed/${id}/${format}`}
+        value={`${pathname}/media-rss/feed/${id}/${format}`}
         disabled
         rightSection={
-          <CopyButton value={`${pathname}/feed/${id}/${format}`}>
+          <CopyButton value={`${pathname}/media-rss/feed/${id}/${format}`}>
             {({ copied, copy }) => (
               <FontAwesomeIcon icon={copied ? faCheck : faCopy} onClick={copy} />
             )}
