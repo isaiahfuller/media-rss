@@ -24,6 +24,8 @@ export default function mapStatus(status: string) {
             return 'dropped';
         case 'ON_HOLD':
             return 'on_hold';
+        case 'PLAYED':
+            return 'played';
         default:
             return 'unknown';
     }

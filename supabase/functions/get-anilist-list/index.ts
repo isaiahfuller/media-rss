@@ -81,15 +81,24 @@ Deno.serve(async (req: any) => {
       query: query,
     }),
   };
-  const response = await fetch(url, options);
-  const result = await response.json();
-  return new Response(JSON.stringify(formatList(result.data.Page.activities)), {
-    headers: {
-      'Content-Type': 'application/json',
-      Connection: 'keep-alive',
-      ...corsHeaders,
-    },
-  });
+  try{
+    const response = await fetch(url, options);
+    const result = await response.json();
+    if('errors' in result){
+      return new Response(JSON.stringify({service: 'anilist', list: []}))
+    }
+    return new Response(JSON.stringify(formatList(result.data.Page.activities)), {
+      headers: {
+        'Content-Type': 'application/json',
+        Connection: 'keep-alive',
+        ...corsHeaders,
+      },
+    });
+  } catch(e){
+    return new Response('Internal Server Error', {
+      status: 500,
+    });
+  }
 });
 
 function formatList(data: any) {

@@ -1,4 +1,5 @@
 import { getAnilistList } from './anilist';
+import { getLastfmList } from './lastfm';
 import { getMalList } from './mal';
 import { createClient } from './supabase/server';
 
@@ -14,6 +15,10 @@ export default async function getCombinedList(id: string) {
     .from('myanimelist_user')
     .select('external_name')
     .eq('user_id', id);
+  const { data: lastfmUsername } = await supabase
+    .from('lastfm_user')
+    .select('external_name')
+    .eq('user_id', id);
 
   if (anilistId && anilistId.length) {
     const anilistData = await getAnilistList(anilistId[0].external_id);
@@ -26,6 +31,13 @@ export default async function getCombinedList(id: string) {
     const malData = await getMalList(malId[0].external_name);
     if (malData) {
       list.push(...malData.list);
+    }
+  }
+
+  if (lastfmUsername && lastfmUsername.length) {
+    const lfmData = await getLastfmList(lastfmUsername[0].external_name);
+    if (lfmData) {
+      list.push(...lfmData.list);
     }
   }
 

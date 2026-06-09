@@ -4,6 +4,7 @@ import Source from '@/components/Source/Source';
 import { getAnilistId, getAnilistList } from '@/lib/anilist';
 import { getMalList } from '@/lib/mal';
 import { createClient } from '@/lib/supabase/server';
+import { getLastfmList } from '@/lib/lastfm';
 
 export default async function SourcePage({ params }: { params: Promise<{ source: string[] }> }) {
   const { source } = await params;
@@ -33,6 +34,12 @@ export default async function SourcePage({ params }: { params: Promise<{ source:
     return id;
   }
 
+  async function _getLastfmList(username: string){
+    'use server';
+    const list = await getLastfmList(username)
+    return list;
+  }
+
   return (
     <Container>
       <Source
@@ -40,6 +47,7 @@ export default async function SourcePage({ params }: { params: Promise<{ source:
         getMalList={_getMalList}
         getAnilistId={_getAnilistId}
         getAnilistList={_getAnilistList}
+        getLastfmList={_getLastfmList}
       />
     </Container>
   );

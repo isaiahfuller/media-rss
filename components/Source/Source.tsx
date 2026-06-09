@@ -11,11 +11,13 @@ export default function Source({
   getMalList,
   getAnilistId,
   getAnilistList,
+  getLastfmList
 }: {
   source: string[];
   getMalList: (username: string) => Promise<GlobalList>;
   getAnilistId: (username: string) => Promise<number>;
   getAnilistList: (id: number) => Promise<GlobalList>;
+  getLastfmList: (username: string) => Promise<GlobalList>;
 }) {
   const [username, setUsername] = useState<string>('');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -54,6 +56,13 @@ export default function Source({
           setList(null);
           const list = await getMalList(data[0].external_name);
           setList(list);
+          break;
+        }
+        case 'lastfm':{
+          setList(null);
+          const list = await getLastfmList(data[0].external_name);
+          setList(list);
+          console.log(list, data[0].external_name)
           break;
         }
         default:
@@ -103,6 +112,13 @@ export default function Source({
         insertValue(-1, username);
         setList(null);
         const newList = await getMalList(username);
+        setList(newList);
+        break;
+      }
+      case 'lastfm': {
+        insertValue(-1, username)
+        setList(null);
+        const newList = await getLastfmList(username);
         setList(newList);
         break;
       }
