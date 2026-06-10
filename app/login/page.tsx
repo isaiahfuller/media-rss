@@ -1,6 +1,8 @@
 import { redirect } from 'next/navigation';
-import { Center } from '@mantine/core';
+import { Center, Stack } from '@mantine/core';
 import GithubButton from '@/components/AuthButtons/Github';
+import MalButton from '@/components/AuthButtons/Mal';
+import AniListButton from '@/components/AuthButtons/Anilist';
 import { createClient } from '@/lib/supabase/server';
 
 export default async function LoginPage() {
@@ -15,7 +17,11 @@ export default async function LoginPage() {
 
   return (
     <Center h="100vh">
-      <GithubButton />
+      <Stack>
+        <GithubButton />
+        <MalButton />
+        <AniListButton />
+      </Stack>
     </Center>
   );
 }

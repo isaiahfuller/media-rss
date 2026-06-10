@@ -1,0 +1,28 @@
+'use client';
+
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button } from '@mantine/core';
+import { createClient } from '@/lib/supabase/client';
+
+export default function MalButton() {
+  const supabase = createClient();
+  async function signInWithMal() {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'custom:myanimelist',
+      options: {
+        redirectTo: `${window.location.origin}/media-rss/auth/callback`,
+      },
+    });
+
+    if (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+  }
+  return (
+    <Button leftSection={<FontAwesomeIcon icon={faGithub} />} onClick={signInWithMal}>
+      Sign in with MyAnimeList
+    </Button>
+  );
+}
