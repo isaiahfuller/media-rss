@@ -18,9 +18,9 @@ export default async function LoginPage() {
   return (
     <Center h="100vh">
       <Stack>
-        <GithubButton />
-        <MalButton />
-        <AniListButton />
+        <GithubButton link={false} />
+        <MalButton link={false} />
+        <AniListButton link={false} />
       </Stack>
     </Center>
   );

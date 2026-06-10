@@ -65,7 +65,7 @@ Deno.serve(async (req) => {
       name: user.name,
       preferred_username: user.name,
       picture: user.avatar?.large,
-      email: `${user.id}@://placeholder.com`, // Workaround fallback email
+      email: `${user.id}@anilist.internal`, // Workaround fallback email
       email_verified: true
     };
 

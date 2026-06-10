@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { faCopy } from '@fortawesome/free-regular-svg-icons';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CopyButton, NativeSelect, TextInput } from '@mantine/core';
+import { CopyButton, Flex, NativeSelect, TextInput } from '@mantine/core';
 
 export default function IDField({ id }: { id: string }) {
   const [pathname, setPathname] = useState<string>('');
@@ -15,8 +15,9 @@ export default function IDField({ id }: { id: string }) {
   }, []);
 
   return (
-    <>
+    <Flex w="50vw">
       <TextInput
+        w="inherit"
         value={`${pathname}/media-rss/feed/${id}/${format}`}
         disabled
         rightSection={
@@ -36,6 +37,6 @@ export default function IDField({ id }: { id: string }) {
         value={format}
         onChange={(e) => setFormat(e.target.value)}
       />
-    </>
+    </Flex>
   );
 }

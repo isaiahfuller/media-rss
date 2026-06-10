@@ -101,6 +101,7 @@ export default function Navbar() {
           direction={{ base: 'column', sm: 'row' }}
           align={{ base: 'flex-start', sm: 'center' }}
         >
+          <NavLink component={Link} href="/settings" variant="subtle" label="Settings" />
           <NavLink
             variant="subtle"
             label="Logout"

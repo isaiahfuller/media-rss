@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '@mantine/core';
 import { createClient } from '@/lib/supabase/client';
 
-export default function MalButton() {
+export default function MalButton({ link = false }: { link: boolean }) {
   const supabase = createClient();
   async function signInWithMal() {
     const { error } = await supabase.auth.signInWithOAuth({
@@ -20,9 +20,22 @@ export default function MalButton() {
       console.error(error);
     }
   }
+  async function linkMal() {
+    const { error } = await supabase.auth.linkIdentity({
+      provider: 'custom:myanimelist',
+      options: {
+        redirectTo: `${window.location.origin}/media-rss/settings`,
+      },
+    });
+
+    if (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+  }
   return (
-    <Button leftSection={<FontAwesomeIcon icon={faGithub} />} onClick={signInWithMal}>
-      Sign in with MyAnimeList
+    <Button leftSection={<FontAwesomeIcon icon={faGithub} />} onClick={link ? linkMal : signInWithMal}>
+      {link ? 'Link MyAnimeList' : 'Sign in with MyAnimeList'}
     </Button>
   );
 }
