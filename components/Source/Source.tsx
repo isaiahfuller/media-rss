@@ -11,7 +11,7 @@ export default function Source({
   getMalList,
   getAnilistId,
   getAnilistList,
-  getLastfmList
+  getLastfmList,
 }: {
   source: string[];
   getMalList: (username: string) => Promise<GlobalList>;
@@ -58,11 +58,10 @@ export default function Source({
           setList(list);
           break;
         }
-        case 'lastfm':{
+        case 'lastfm': {
           setList(null);
           const list = await getLastfmList(data[0].external_name);
           setList(list);
-          console.log(list, data[0].external_name)
           break;
         }
         default:
@@ -116,7 +115,7 @@ export default function Source({
         break;
       }
       case 'lastfm': {
-        insertValue(-1, username)
+        insertValue(-1, username);
         setList(null);
         const newList = await getLastfmList(username);
         setList(newList);

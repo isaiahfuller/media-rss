@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { faCopy } from '@fortawesome/free-regular-svg-icons';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CopyButton, Menu, MenuDropdown, NativeSelect, TextInput } from '@mantine/core';
+import { CopyButton, NativeSelect, TextInput } from '@mantine/core';
 
 export default function IDField({ id }: { id: string }) {
   const [pathname, setPathname] = useState<string>('');
@@ -17,10 +17,10 @@ export default function IDField({ id }: { id: string }) {
   return (
     <>
       <TextInput
-        value={`${pathname}/feed/${id}/${format}`}
+        value={`${pathname}/media-rss/feed/${id}/${format}`}
         disabled
         rightSection={
-          <CopyButton value={`${pathname}/feed/${id}/${format}`}>
+          <CopyButton value={`${pathname}/media-rss/feed/${id}/${format}`}>
             {({ copied, copy }) => (
               <FontAwesomeIcon icon={copied ? faCheck : faCopy} onClick={copy} />
             )}

@@ -10,7 +10,6 @@ import { useDisclosure, useViewportSize } from '@mantine/hooks';
 import AniList from '@/img/AniList.svg';
 import Lastfm from '@/img/Lastfm.svg';
 import MyAnimeList from '@/img/MyAnimeList.svg';
-import Trakt from '@/img/Trakt.svg';
 import { createClient } from '@/lib/supabase/client';
 
 export default function Navbar() {
