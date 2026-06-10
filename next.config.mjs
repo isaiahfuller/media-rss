@@ -6,6 +6,7 @@ const withBundleAnalyzer = bundleAnalyzer({
 
 export default withBundleAnalyzer({
   reactStrictMode: false,
+  basePath: '/media-rss',
   experimental: {
     optimizePackageImports: ['@mantine/core', '@mantine/hooks'],
   },
