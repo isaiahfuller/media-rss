@@ -1,15 +1,21 @@
+import AccountDeleteButton from '@/components/AuthButtons/AccountDelete';
 import AniListButton from '@/components/AuthButtons/Anilist';
 import GithubButton from '@/components/AuthButtons/Github';
 import MalButton from '@/components/AuthButtons/Mal';
 import { createClient } from '@/lib/supabase/server';
 import { Button, Center, Container, Divider, Group, Stack, Title } from "@mantine/core";
 import { Text } from "@mantine/core";
+import { redirect } from 'next/navigation';
 
 export default async function Settings() {
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return redirect('/login');
+  }
   const { data: identities, error } = await supabase.auth.getUserIdentities();
   const linkedProviders = identities?.identities?.map((identity) => identity.provider)
-  console.log("identities", identities?.identities)
+  console.log(identities)
   return (
     <Container>
       <Center>
@@ -31,6 +37,12 @@ export default async function Settings() {
           <Text>GitHub</Text>
           {linkedProviders?.includes("github") ? <Text>Already linked</Text> : <GithubButton link={true} />}
         </Group>
+      </Stack>
+      <Divider />
+      <Stack>
+        <Title c="red">Danger Zone</Title>
+        <Text>Warning: This will delete your account and all data associated with it.</Text>
+        <AccountDeleteButton id={user?.id!} />
       </Stack>
     </Container>
   );
