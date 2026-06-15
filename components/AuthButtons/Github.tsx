@@ -34,7 +34,12 @@ export default function GithubButton({ link = false }: { link: boolean }) {
     }
   }
   return (
-    <Button leftSection={<FontAwesomeIcon icon={faGithub} />} onClick={link ? linkGithub : signInWithGithub}>
+    <Button
+      justify='space-between'
+      leftSection={<FontAwesomeIcon icon={faGithub} />}
+      onClick={link ? linkGithub : signInWithGithub}
+      rightSection={<span />}
+    >
       {link ? 'Link GitHub' : 'Sign in with GitHub'}
     </Button>
   );

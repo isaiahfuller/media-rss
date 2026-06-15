@@ -4,6 +4,8 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '@mantine/core';
 import { createClient } from '@/lib/supabase/client';
+import Image from 'next/image';
+import MyAnimeList from '@/img/MyAnimeList.svg';
 
 export default function MalButton({ link = false }: { link: boolean }) {
   const supabase = createClient();
@@ -34,7 +36,12 @@ export default function MalButton({ link = false }: { link: boolean }) {
     }
   }
   return (
-    <Button leftSection={<FontAwesomeIcon icon={faGithub} />} onClick={link ? linkMal : signInWithMal}>
+    <Button
+      justify='space-between'
+      leftSection={<Image src={MyAnimeList} alt="MyAnimeList" width={20} height={20} />}
+      onClick={link ? linkMal : signInWithMal}
+      rightSection={<span />}
+    >
       {link ? 'Link MyAnimeList' : 'Sign in with MyAnimeList'}
     </Button>
   );
