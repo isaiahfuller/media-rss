@@ -15,7 +15,23 @@ export default async function Settings() {
   }
   const { data: identities, error } = await supabase.auth.getUserIdentities();
   const linkedProviders = identities?.identities?.map((identity) => identity.provider)
-  console.log(identities)
+  // console.log(identities?.identities)
+  if (identities?.identities) {
+    for (const identity of identities?.identities) {
+      if (identity.provider === "custom:anilist") {
+        console.log("AniList linked");
+        console.log(identity.identity_data)
+      }
+      if (identity.provider === "custom:myanimelist") {
+        console.log("MyAnimeList linked");
+        console.log(identity.identity_data)
+      }
+      if (identity.provider === "github") {
+        console.log("GitHub linked");
+        console.log(identity.identity_data)
+      }
+    }
+  }
   return (
     <Container>
       <Center>

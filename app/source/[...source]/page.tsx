@@ -5,6 +5,7 @@ import { getAnilistId, getAnilistList } from '@/lib/anilist';
 import { getMalList } from '@/lib/mal';
 import { createClient } from '@/lib/supabase/server';
 import { getLastfmList } from '@/lib/lastfm';
+import { GlobalList } from '@/interfaces/globalList';
 
 export default async function SourcePage({ params }: { params: Promise<{ source: string[] }> }) {
   const { source } = await params;
@@ -16,16 +17,38 @@ export default async function SourcePage({ params }: { params: Promise<{ source:
     return redirect('/login');
   }
 
-  async function _getMalList(username: string) {
-    'use server';
-    const list = await getMalList(username);
-    return list;
+  let anilistId: string | undefined, malId: string | undefined;
+  const { data: identities, error } = await supabase.auth.getUserIdentities();
+  if (error) {
+    throw error;
+  }
+  for (const identity of identities?.identities!) {
+    if (identity.provider === "custom:anilist") {
+      anilistId = identity.identity_data?.sub;
+    }
+    if (identity.provider === "custom:myanimelist") {
+      malId = identity.identity_data?.preferred_username;
+    }
   }
 
-  async function _getAnilistList(id: number) {
+  async function _getMalList(): Promise<GlobalList> {
     'use server';
-    const list = await getAnilistList(id);
-    return list;
+    // const { malId } = await getIdentities();
+    if (malId) {
+      const list = await getMalList(malId);
+      return list;
+    }
+    return { service: 'myanimelist', list: [] };
+  }
+
+  async function _getAnilistList(): Promise<GlobalList> {
+    'use server';
+    // const { anilistId } = await getIdentities();
+    if (anilistId) {
+      const list = await getAnilistList(Number(anilistId));
+      return list;
+    }
+    return { service: 'anilist', list: [] };
   }
 
   async function _getAnilistId(username: string) {
@@ -34,7 +57,7 @@ export default async function SourcePage({ params }: { params: Promise<{ source:
     return id;
   }
 
-  async function _getLastfmList(username: string){
+  async function _getLastfmList(username: string): Promise<GlobalList> {
     'use server';
     const list = await getLastfmList(username)
     return list;

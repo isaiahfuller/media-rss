@@ -14,9 +14,9 @@ export default function Source({
   getLastfmList,
 }: {
   source: string[];
-  getMalList: (username: string) => Promise<GlobalList>;
+  getMalList: () => Promise<GlobalList>;
   getAnilistId: (username: string) => Promise<number>;
-  getAnilistList: (id: number) => Promise<GlobalList>;
+  getAnilistList: () => Promise<GlobalList>;
   getLastfmList: (username: string) => Promise<GlobalList>;
 }) {
   const [username, setUsername] = useState<string>('');
@@ -38,6 +38,22 @@ export default function Source({
     if (!user) {
       return;
     }
+    switch (source[0]) {
+      case 'anilist': {
+        const list = await getAnilistList();
+        setList(list);
+        break;
+      }
+      case 'myanimelist': {
+        const list = await getMalList();
+        setList(list);
+        break;
+      }
+    }
+    if(list && list.list?.length){
+      setLoading(false);
+      return;
+    }
     const { data } = await supabase
       .from(`${source[0]}_user`)
       .select('external_id, external_name')
@@ -45,19 +61,6 @@ export default function Source({
     if (data && data.length) {
       setUsername(data[0].external_name);
       switch (source[0]) {
-        case 'anilist': {
-          setExternalId(data[0].external_id);
-          setList(null);
-          const list = await getAnilistList(data[0].external_id);
-          setList(list);
-          break;
-        }
-        case 'myanimelist': {
-          setList(null);
-          const list = await getMalList(data[0].external_name);
-          setList(list);
-          break;
-        }
         case 'lastfm': {
           setList(null);
           const list = await getLastfmList(data[0].external_name);
@@ -101,16 +104,14 @@ export default function Source({
     switch (source[0]) {
       case 'anilist': {
         const id = await getAnilistId(username);
-        insertValue(id, username);
         setList(null);
-        const newList = await getAnilistList(id);
+        const newList = await getAnilistList();
         setList(newList);
         break;
       }
       case 'myanimelist': {
-        insertValue(-1, username);
         setList(null);
-        const newList = await getMalList(username);
+        const newList = await getMalList();
         setList(newList);
         break;
       }
@@ -131,8 +132,9 @@ export default function Source({
     <Stack>
       <form onSubmit={handleSubmit}>
         <h1>Source: {source}</h1>
-        <Center>
-          <Group align="flex-end">
+        {source[0] === 'anilist' || source[0] === 'myanimelist' ? null : (
+          <Center>
+            <Group align="flex-end">
             <TextInput
               placeholder="Enter your username"
               label="Username"
@@ -144,16 +146,27 @@ export default function Source({
             </Button>
           </Group>
         </Center>
+        )}
       </form>
-      {list || username ? <Divider /> : null}
+      {
+        loading ? <Center>
+                    <Group>
+                      <Loader />
+                      <p>Getting list...</p>
+                    </Group>
+                  </Center> :
+        (list || username) && !(source[0] === 'anilist' || source[0] === 'myanimelist') ? 
+        <>
+          <Divider />
+        </>
+        : null
+      }
       <Center>
         {list ? (
           <>
             <List list={list} />
           </>
-        ) : username ? (
-          <Loader />
-        ) : null}
+        ): null}
       </Center>
     </Stack>
   );
