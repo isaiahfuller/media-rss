@@ -1,9 +1,12 @@
+import Image from 'next/image';
 import { redirect } from 'next/navigation';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Center, Container, Divider, Group, Stack, Text, Title } from '@mantine/core';
 import AccountDeleteButton from '@/components/AuthButtons/AccountDelete';
-import AniListButton from '@/components/AuthButtons/Anilist';
-import GithubButton from '@/components/AuthButtons/Github';
-import MalButton from '@/components/AuthButtons/Mal';
+import AuthButton from '@/components/AuthButtons/AuthButton';
+import AniList from '@/img/AniList.svg';
+import MyAnimeList from '@/img/MyAnimeList.svg';
 import { createClient } from '@/lib/supabase/server';
 
 export default async function Settings() {
@@ -45,28 +48,64 @@ export default async function Settings() {
         <Group>
           <Text>AniList</Text>
           {linkedProviders?.includes('custom:anilist') ? (
-            <Text>Already linked</Text>
+            <AuthButton
+              loggedIn={true}
+              providerText="custom:anilist"
+              providerIcon={<Image src={AniList} alt="AniList" width={20} height={20} />}
+              providerObj={identities?.identities.find(
+                (identity) => identity.provider === 'custom:anilist'
+              )}
+              providerName="AniList"
+            />
           ) : (
-            <AniListButton loggedIn={true} />
+            <AuthButton
+              loggedIn={true}
+              providerText="custom:anilist"
+              providerIcon={<Image src={AniList} alt="AniList" width={20} height={20} />}
+              providerName="AniList"
+            />
           )}
         </Group>
         <Group>
           <Text>MyAnimeList</Text>
           {linkedProviders?.includes('custom:myanimelist') ? (
-            <Text>Already linked</Text>
+            <AuthButton
+              loggedIn={true}
+              providerText="custom:myanimelist"
+              providerIcon={<Image src={MyAnimeList} alt="MyAnimeList" width={20} height={20} />}
+              providerObj={identities?.identities.find(
+                (identity) => identity.provider === 'custom:myanimelist'
+              )}
+              providerName="MyAnimeList"
+            />
           ) : (
-            <MalButton loggedIn={true} />
+            <AuthButton
+              loggedIn={true}
+              providerText="custom:myanimelist"
+              providerIcon={<Image src={MyAnimeList} alt="MyAnimeList" width={20} height={20} />}
+              providerName="MyAnimeList"
+            />
           )}
         </Group>
         <Group>
           <Text>GitHub</Text>
           {linkedProviders?.includes('github') ? (
-            <GithubButton
+            <AuthButton
               loggedIn={true}
-              provider={identities?.identities.find((identity) => identity.provider === 'github')}
+              providerText="github"
+              providerIcon={<FontAwesomeIcon icon={faGithub} />}
+              providerObj={identities?.identities.find(
+                (identity) => identity.provider === 'github'
+              )}
+              providerName="GitHub"
             />
           ) : (
-            <GithubButton loggedIn={true} />
+            <AuthButton
+              loggedIn={true}
+              providerText="github"
+              providerIcon={<FontAwesomeIcon icon={faGithub} />}
+              providerName="GitHub"
+            />
           )}
         </Group>
       </Stack>
