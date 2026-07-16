@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
 import AniList from '@/img/AniList.svg';
 
-export default function AniListButton({ link = false }: { link: boolean }) {
+export default function AniListButton({ loggedIn = false }: { loggedIn: boolean }) {
   const supabase = createClient();
   async function signInWithAniList() {
     const { error } = await supabase.auth.signInWithOAuth({
@@ -37,10 +37,10 @@ export default function AniListButton({ link = false }: { link: boolean }) {
     <Button
       justify='space-between'
       leftSection={<Image src={AniList} alt="AniList" width={20} height={20} />}
-      onClick={link ? linkAniList : signInWithAniList}
+      onClick={loggedIn ? linkAniList : signInWithAniList}
       rightSection={<span />}
     >
-      {link ? 'Link AniList' : 'Sign in with AniList'}
+      {loggedIn ? 'loggedIn AniList' : 'Sign in with AniList'}
     </Button>
   );
 }

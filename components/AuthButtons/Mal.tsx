@@ -7,7 +7,7 @@ import { createClient } from '@/lib/supabase/client';
 import Image from 'next/image';
 import MyAnimeList from '@/img/MyAnimeList.svg';
 
-export default function MalButton({ link = false }: { link: boolean }) {
+export default function MalButton({ loggedIn = false }: { loggedIn: boolean }) {
   const supabase = createClient();
   async function signInWithMal() {
     const { error } = await supabase.auth.signInWithOAuth({
@@ -39,10 +39,10 @@ export default function MalButton({ link = false }: { link: boolean }) {
     <Button
       justify='space-between'
       leftSection={<Image src={MyAnimeList} alt="MyAnimeList" width={20} height={20} />}
-      onClick={link ? linkMal : signInWithMal}
+      onClick={loggedIn ? linkMal : signInWithMal}
       rightSection={<span />}
     >
-      {link ? 'Link MyAnimeList' : 'Sign in with MyAnimeList'}
+      {loggedIn ? 'loggedIn MyAnimeList' : 'Sign in with MyAnimeList'}
     </Button>
   );
 }

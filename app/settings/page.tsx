@@ -43,15 +43,15 @@ export default async function Settings() {
         <Text>Link your social accounts to get started</Text>
         <Group>
           <Text>AniList</Text>
-          {linkedProviders?.includes("custom:anilist") ? <Text>Already linked</Text> : <AniListButton link={true} />}
+          {linkedProviders?.includes("custom:anilist") ? <Text>Already linked</Text> : <AniListButton loggedIn={true} />}
         </Group>
         <Group>
           <Text>MyAnimeList</Text>
-          {linkedProviders?.includes("custom:myanimelist") ? <Text>Already linked</Text> : <MalButton link={true} />}
+          {linkedProviders?.includes("custom:myanimelist") ? <Text>Already linked</Text> : <MalButton loggedIn={true} />}
         </Group>
         <Group>
           <Text>GitHub</Text>
-          {linkedProviders?.includes("github") ? <Text>Already linked</Text> : <GithubButton link={true} />}
+          {linkedProviders?.includes("github") ? <Text>Already linked</Text> : <GithubButton loggedIn={true} />}
         </Group>
       </Stack>
       <Divider />

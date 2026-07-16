@@ -5,13 +5,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '@mantine/core';
 import { createClient } from '@/lib/supabase/client';
 
-export default function GithubButton({ link = false }: { link: boolean }) {
+export default function GithubButton({ loggedIn = false }: { loggedIn: boolean }) {
   const supabase = createClient();
   async function signInWithGithub() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'github',
       options: {
-        redirectTo: link ? `${window.location.origin}/media-rss/settings` : `${window.location.origin}/media-rss/auth/callback`,
+        redirectTo: loggedIn ? `${window.location.origin}/media-rss/settings` : `${window.location.origin}/media-rss/auth/callback`,
       },
     });
 
@@ -37,10 +37,10 @@ export default function GithubButton({ link = false }: { link: boolean }) {
     <Button
       justify='space-between'
       leftSection={<FontAwesomeIcon icon={faGithub} />}
-      onClick={link ? linkGithub : signInWithGithub}
+      onClick={loggedIn ? linkGithub : signInWithGithub}
       rightSection={<span />}
     >
-      {link ? 'Link GitHub' : 'Sign in with GitHub'}
+      {loggedIn ? 'loggedIn GitHub' : 'Sign in with GitHub'}
     </Button>
   );
 }
