@@ -10,10 +10,10 @@ export default async function getCombinedList(id: string) {
   let anilistId: string | undefined, malId: string | undefined;
 
   for (const identity of identities?.identities!) {
-    if (identity.provider === "custom:anilist") {
+    if (identity.provider === 'custom:anilist') {
       anilistId = identity.identity_data?.sub;
     }
-    if (identity.provider === "custom:myanimelist") {
+    if (identity.provider === 'custom:myanimelist') {
       malId = identity.identity_data?.preferred_username;
     }
   }

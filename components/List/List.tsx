@@ -2,7 +2,18 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { faBook, faCalendar, faCheck, faMusic, faPause, faPlay, faQuestion, faTimes, faTv, faVideo } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBook,
+  faCalendar,
+  faCheck,
+  faMusic,
+  faPause,
+  faPlay,
+  faQuestion,
+  faTimes,
+  faTv,
+  faVideo,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Center, Image as MantineImage, Table } from '@mantine/core';
 import { GlobalList } from '@/interfaces/globalList';

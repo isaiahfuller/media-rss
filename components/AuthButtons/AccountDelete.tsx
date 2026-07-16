@@ -1,7 +1,7 @@
 'use client';
 
-import { deleteUser } from '@/lib/deleteUser';
 import { Button } from '@mantine/core';
+import { deleteUser } from '@/lib/deleteUser';
 
 export default function AccountDeleteButton({ id }: { id: string }) {
   async function deleteAccount() {
