@@ -9,7 +9,6 @@ import List from '../List/List';
 export default function Source({
   source,
   getMalList,
-  getAnilistId,
   getAnilistList,
   getLastfmList,
 }: {
@@ -103,7 +102,6 @@ export default function Source({
     setLoading(true);
     switch (source[0]) {
       case 'anilist': {
-        const id = await getAnilistId(username);
         setList(null);
         const newList = await getAnilistList();
         setList(newList);

@@ -23,7 +23,7 @@ export function GET(_req: NextRequest, context: { params: Promise<{ id: string; 
     list.forEach((item) => {
       feed.addItem({
         title: item.title,
-        id: item.timestamp + '',
+        id: `${item.timestamp}`,
         link: item.url || '',
         description: item.status,
         content: item.album || '',

@@ -5,11 +5,14 @@ import { createClient } from './supabase/server';
 
 export default async function getCombinedList(id: string) {
   const supabase = await createClient();
-  const { data: identities, error } = await supabase.auth.getUserIdentities();
   const list = [];
   let anilistId: string | undefined, malId: string | undefined;
 
-  for (const identity of identities?.identities!) {
+  const { data: identities, error } = await supabase.auth.getUserIdentities();
+  if (error) {
+    throw error;
+  }
+  for (const identity of identities.identities) {
     if (identity.provider === 'custom:anilist') {
       anilistId = identity.identity_data?.sub;
     }

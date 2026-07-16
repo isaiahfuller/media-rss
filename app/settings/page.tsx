@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Center, Container, Divider, Group, Stack, Text, Title } from '@mantine/core';
+import { Center, Container, Divider, Group, Stack, Text, Title } from '@mantine/core';
 import AccountDeleteButton from '@/components/AuthButtons/AccountDelete';
 import AuthButton from '@/components/AuthButtons/AuthButton';
 import AniList from '@/img/AniList.svg';
@@ -17,25 +17,24 @@ export default async function Settings() {
   if (!user) {
     return redirect('/login');
   }
-  const { data: identities, error } = await supabase.auth.getUserIdentities();
+  const { data: identities } = await supabase.auth.getUserIdentities();
   const linkedProviders = identities?.identities?.map((identity) => identity.provider);
-  // console.log(identities?.identities)
-  if (identities?.identities) {
-    for (const identity of identities?.identities) {
-      if (identity.provider === 'custom:anilist') {
-        console.log('AniList linked');
-        console.log(identity.identity_data);
-      }
-      if (identity.provider === 'custom:myanimelist') {
-        console.log('MyAnimeList linked');
-        console.log(identity.identity_data);
-      }
-      if (identity.provider === 'github') {
-        console.log('GitHub linked');
-        console.log(identity.identity_data);
-      }
-    }
-  }
+  // if (identities && identities.identities) {
+  //   for (const identity of identities.identities) {
+  //     if (identity.provider === 'custom:anilist') {
+  //       console.log('AniList linked');
+  //       console.log(identity.identity_data);
+  //     }
+  //     if (identity.provider === 'custom:myanimelist') {
+  //       console.log('MyAnimeList linked');
+  //       console.log(identity.identity_data);
+  //     }
+  //     if (identity.provider === 'github') {
+  //       console.log('GitHub linked');
+  //       console.log(identity.identity_data);
+  //     }
+  //   }
+  // }
   return (
     <Container>
       <Center>
@@ -49,7 +48,7 @@ export default async function Settings() {
           <Text>AniList</Text>
           {linkedProviders?.includes('custom:anilist') ? (
             <AuthButton
-              loggedIn={true}
+              loggedIn
               providerText="custom:anilist"
               providerIcon={<Image src={AniList} alt="AniList" width={20} height={20} />}
               providerObj={identities?.identities.find(
@@ -59,7 +58,7 @@ export default async function Settings() {
             />
           ) : (
             <AuthButton
-              loggedIn={true}
+              loggedIn
               providerText="custom:anilist"
               providerIcon={<Image src={AniList} alt="AniList" width={20} height={20} />}
               providerName="AniList"
@@ -70,7 +69,7 @@ export default async function Settings() {
           <Text>MyAnimeList</Text>
           {linkedProviders?.includes('custom:myanimelist') ? (
             <AuthButton
-              loggedIn={true}
+              loggedIn
               providerText="custom:myanimelist"
               providerIcon={<Image src={MyAnimeList} alt="MyAnimeList" width={20} height={20} />}
               providerObj={identities?.identities.find(
@@ -80,7 +79,7 @@ export default async function Settings() {
             />
           ) : (
             <AuthButton
-              loggedIn={true}
+              loggedIn
               providerText="custom:myanimelist"
               providerIcon={<Image src={MyAnimeList} alt="MyAnimeList" width={20} height={20} />}
               providerName="MyAnimeList"
@@ -91,7 +90,7 @@ export default async function Settings() {
           <Text>GitHub</Text>
           {linkedProviders?.includes('github') ? (
             <AuthButton
-              loggedIn={true}
+              loggedIn
               providerText="github"
               providerIcon={<FontAwesomeIcon icon={faGithub} />}
               providerObj={identities?.identities.find(
@@ -101,7 +100,7 @@ export default async function Settings() {
             />
           ) : (
             <AuthButton
-              loggedIn={true}
+              loggedIn
               providerText="github"
               providerIcon={<FontAwesomeIcon icon={faGithub} />}
               providerName="GitHub"
@@ -113,7 +112,7 @@ export default async function Settings() {
       <Stack>
         <Title c="red">Danger Zone</Title>
         <Text>Warning: This will delete your account and all data associated with it.</Text>
-        <AccountDeleteButton id={user?.id!} />
+        <AccountDeleteButton id={user?.id} />
       </Stack>
     </Container>
   );

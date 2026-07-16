@@ -22,7 +22,7 @@ export default async function SourcePage({ params }: { params: Promise<{ source:
   if (error) {
     throw error;
   }
-  for (const identity of identities?.identities!) {
+  for (const identity of identities.identities) {
     if (identity.provider === 'custom:anilist') {
       anilistId = identity.identity_data?.sub;
     }

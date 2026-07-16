@@ -5,12 +5,11 @@ import { deleteUser } from '@/lib/deleteUser';
 
 export default function AccountDeleteButton({ id }: { id: string }) {
   async function deleteAccount() {
-    const data = await deleteUser(id);
-    console.log(data);
+    await deleteUser(id);
   }
   return (
     <Button color="red" onClick={deleteAccount}>
-      {'Delete Account'}
+      Delete Account
     </Button>
   );
 }

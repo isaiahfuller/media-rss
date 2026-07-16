@@ -1,8 +1,6 @@
 'use client';
 
 import { redirect } from 'next/navigation';
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Provider, UserIdentity } from '@supabase/supabase-js';
 import { Button } from '@mantine/core';
 import { createClient } from '@/lib/supabase/client';
@@ -38,7 +36,7 @@ export default function AuthButton({
   }
   async function linkProvider() {
     if (providerObj) {
-      const { data, error } = await supabase.auth.unlinkIdentity(providerObj);
+      const { error } = await supabase.auth.unlinkIdentity(providerObj);
       if (error) {
         // eslint-disable-next-line no-console
         console.error(error);
@@ -67,9 +65,9 @@ export default function AuthButton({
     >
       {loggedIn
         ? providerObj
-          ? 'Unlink ' + providerName
-          : 'Link ' + providerName
-        : 'Sign in with ' + providerName}
+          ? `Unlink ${providerName}`
+          : `Link ${providerName}`
+        : `Sign in with ${providerName}`}
     </Button>
   );
 }
