@@ -40,7 +40,7 @@ export default function GithubButton({ loggedIn = false }: { loggedIn: boolean }
       onClick={loggedIn ? linkGithub : signInWithGithub}
       rightSection={<span />}
     >
-      {loggedIn ? 'loggedIn GitHub' : 'Sign in with GitHub'}
+      {loggedIn ? 'Link GitHub' : 'Sign in with GitHub'}
     </Button>
   );
 }

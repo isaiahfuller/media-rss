@@ -40,7 +40,7 @@ export default function AniListButton({ loggedIn = false }: { loggedIn: boolean 
       onClick={loggedIn ? linkAniList : signInWithAniList}
       rightSection={<span />}
     >
-      {loggedIn ? 'loggedIn AniList' : 'Sign in with AniList'}
+      {loggedIn ? 'Link AniList' : 'Sign in with AniList'}
     </Button>
   );
 }

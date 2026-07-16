@@ -42,7 +42,7 @@ export default function MalButton({ loggedIn = false }: { loggedIn: boolean }) {
       onClick={loggedIn ? linkMal : signInWithMal}
       rightSection={<span />}
     >
-      {loggedIn ? 'loggedIn MyAnimeList' : 'Sign in with MyAnimeList'}
+      {loggedIn ? 'Link MyAnimeList' : 'Sign in with MyAnimeList'}
     </Button>
   );
 }
