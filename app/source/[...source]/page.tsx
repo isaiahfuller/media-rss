@@ -1,11 +1,11 @@
 import { redirect } from 'next/navigation';
 import { Container } from '@mantine/core';
 import Source from '@/components/Source/Source';
+import { GlobalList } from '@/interfaces/globalList';
 import { getAnilistId, getAnilistList } from '@/lib/anilist';
+import { getLastfmList } from '@/lib/lastfm';
 import { getMalList } from '@/lib/mal';
 import { createClient } from '@/lib/supabase/server';
-import { getLastfmList } from '@/lib/lastfm';
-import { GlobalList } from '@/interfaces/globalList';
 
 export default async function SourcePage({ params }: { params: Promise<{ source: string[] }> }) {
   const { source } = await params;
@@ -22,11 +22,11 @@ export default async function SourcePage({ params }: { params: Promise<{ source:
   if (error) {
     throw error;
   }
-  for (const identity of identities?.identities!) {
-    if (identity.provider === "custom:anilist") {
+  for (const identity of identities.identities) {
+    if (identity.provider === 'custom:anilist') {
       anilistId = identity.identity_data?.sub;
     }
-    if (identity.provider === "custom:myanimelist") {
+    if (identity.provider === 'custom:myanimelist') {
       malId = identity.identity_data?.preferred_username;
     }
   }
@@ -59,7 +59,7 @@ export default async function SourcePage({ params }: { params: Promise<{ source:
 
   async function _getLastfmList(username: string): Promise<GlobalList> {
     'use server';
-    const list = await getLastfmList(username)
+    const list = await getLastfmList(username);
     return list;
   }
 

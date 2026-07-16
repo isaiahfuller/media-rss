@@ -13,50 +13,52 @@ export function GET(_req: NextRequest, context: { params: Promise<{ id: string; 
       await supabase.auth.signInAnonymously();
     }
     const list = await getCombinedList(id);
-  const feed = new Feed({
-    title: 'Media Tracker',
-    description: 'Media Tracker',
-    id: 'https://isaiah.moe',
-    link: 'https://isaiah.moe',
-    language: 'en',
-  });
-  list.forEach((item) => {
-    feed.addItem({
-      title: item.title,
-      id: item.timestamp + '',
-      link: item.url || '',
-      description: item.status,
-      content: item.album || '',
-      image: item.image || '',
-      date: new Date(item.timestamp),
-      extensions: [
-        {
-          name: 'exdata',
-          objects: {
-            title: item.title,
-            image: item.image,
-            status: item.status,
-            album: item.album,
-            artist: item.artist,
-            type: item.type,
-            episodes: item.album,
-            chapters: item.album,
-            url: item.url,
-            timestamp: item.timestamp,
-          }
-        }
-      ]
+    const feed = new Feed({
+      title: 'Media Tracker',
+      description: 'Media Tracker',
+      id: 'https://isaiah.moe',
+      link: 'https://isaiah.moe',
+      language: 'en',
     });
-  });
-  if (type.toLowerCase() === 'rss') {
+    list.forEach((item) => {
+      feed.addItem({
+        title: item.title,
+        id: `${item.timestamp}`,
+        link: item.url || '',
+        description: item.status,
+        content: item.album || '',
+        image: item.image || '',
+        date: new Date(item.timestamp),
+        extensions: [
+          {
+            name: 'exdata',
+            objects: {
+              title: item.title,
+              image: item.image,
+              status: item.status,
+              album: item.album,
+              artist: item.artist,
+              type: item.type,
+              episodes: item.album,
+              chapters: item.album,
+              url: item.url,
+              timestamp: item.timestamp,
+            },
+          },
+        ],
+      });
+    });
+    if (type.toLowerCase() === 'rss') {
+      return new NextResponse(feed.rss2(), { headers: { 'Content-Type': 'application/rss+xml' } });
+    }
+    if (type.toLowerCase() === 'atom') {
+      return new NextResponse(feed.atom1(), {
+        headers: { 'Content-Type': 'application/atom+xml' },
+      });
+    }
+    if (type.toLowerCase() === 'json') {
+      return NextResponse.json(list, { headers: { 'Content-Type': 'application/json' } });
+    }
     return new NextResponse(feed.rss2(), { headers: { 'Content-Type': 'application/rss+xml' } });
-  }
-  if (type.toLowerCase() === 'atom') {
-    return new NextResponse(feed.atom1(), { headers: { 'Content-Type': 'application/atom+xml' } });
-  }
-  if (type.toLowerCase() === 'json') {
-    return NextResponse.json(list, { headers: { 'Content-Type': 'application/json' } });
-  }
-  return new NextResponse(feed.rss2(), { headers: { 'Content-Type': 'application/rss+xml' } });
   });
 }

@@ -9,7 +9,6 @@ import List from '../List/List';
 export default function Source({
   source,
   getMalList,
-  getAnilistId,
   getAnilistList,
   getLastfmList,
 }: {
@@ -50,7 +49,7 @@ export default function Source({
         break;
       }
     }
-    if(list && list.list?.length){
+    if (list && list.list?.length) {
       setLoading(false);
       return;
     }
@@ -103,7 +102,6 @@ export default function Source({
     setLoading(true);
     switch (source[0]) {
       case 'anilist': {
-        const id = await getAnilistId(username);
         setList(null);
         const newList = await getAnilistList();
         setList(newList);
@@ -135,38 +133,37 @@ export default function Source({
         {source[0] === 'anilist' || source[0] === 'myanimelist' ? null : (
           <Center>
             <Group align="flex-end">
-            <TextInput
-              placeholder="Enter your username"
-              label="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <Button loading={loading} type="submit">
-              Submit
-            </Button>
-          </Group>
-        </Center>
+              <TextInput
+                placeholder="Enter your username"
+                label="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              <Button loading={loading} type="submit">
+                Submit
+              </Button>
+            </Group>
+          </Center>
         )}
       </form>
-      {
-        loading ? <Center>
-                    <Group>
-                      <Loader />
-                      <p>Getting list...</p>
-                    </Group>
-                  </Center> :
-        (list || username) && !(source[0] === 'anilist' || source[0] === 'myanimelist') ? 
+      {loading ? (
+        <Center>
+          <Group>
+            <Loader />
+            <p>Getting list...</p>
+          </Group>
+        </Center>
+      ) : (list || username) && !(source[0] === 'anilist' || source[0] === 'myanimelist') ? (
         <>
           <Divider />
         </>
-        : null
-      }
+      ) : null}
       <Center>
         {list ? (
           <>
             <List list={list} />
           </>
-        ): null}
+        ) : null}
       </Center>
     </Stack>
   );

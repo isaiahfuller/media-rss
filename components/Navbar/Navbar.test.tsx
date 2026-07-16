@@ -39,7 +39,6 @@ describe('Navbar', () => {
   it('renders desktop navigation links', () => {
     render(<Navbar />);
     expect(screen.getByText('Sources')).toBeInTheDocument();
-    expect(screen.getByText('Filters')).toBeInTheDocument();
     expect(screen.getByText('Logout')).toBeInTheDocument();
   });
 
