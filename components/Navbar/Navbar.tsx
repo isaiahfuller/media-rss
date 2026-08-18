@@ -47,25 +47,25 @@ export default function Navbar() {
               </Menu.Target>
               <Menu.Dropdown>
                 <Menu.Item
+                  component={Link}
+                  href="/source/lastfm"
                   leftSection={<Image src={Lastfm} alt="Last.fm" width={20} height={20} />}
                 >
-                  <Anchor component={Link} href="/source/lastfm" c="inherit">
-                    Last.fm
-                  </Anchor>
+                  Last.fm
                 </Menu.Item>
                 <Menu.Item
+                  component={Link}
+                  href="/source/anilist"
                   leftSection={<Image src={AniList} alt="AniList" width={20} height={20} />}
                 >
-                  <Anchor component={Link} href="/source/anilist" c="inherit">
-                    AniList
-                  </Anchor>
+                  AniList
                 </Menu.Item>
                 <Menu.Item
+                  component={Link}
+                  href="/source/myanimelist"
                   leftSection={<Image src={MyAnimeList} alt="MyAnimeList" width={20} height={20} />}
                 >
-                  <Anchor component={Link} href="/source/myanimelist" c="inherit">
-                    MyAnimeList
-                  </Anchor>
+                  MyAnimeList
                 </Menu.Item>
               </Menu.Dropdown>
             </Menu>
