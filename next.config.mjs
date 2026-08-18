@@ -30,6 +30,12 @@ export default withBundleAnalyzer({
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'lastfm-img.freetls.fastly.net',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 });
