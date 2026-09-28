@@ -28,21 +28,21 @@ export default async function getCombinedList(id: string) {
 
   if (anilistId && anilistId.length) {
     const anilistData = await getAnilistList(Number(anilistId));
-    if (anilistData) {
+    if (anilistData && anilistData.list) {
       list.push(...anilistData.list);
     }
   }
 
   if (malId && malId.length) {
     const malData = await getMalList(malId);
-    if (malData) {
+    if (malData && malData.list) {
       list.push(...malData.list);
     }
   }
 
   if (lastfmUsername && lastfmUsername.length) {
     const lfmData = await getLastfmList(lastfmUsername[0].external_name);
-    if (lfmData) {
+    if (lfmData && lfmData.list) {
       list.push(...lfmData.list);
     }
   }

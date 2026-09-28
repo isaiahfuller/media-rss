@@ -57,7 +57,7 @@ export default function List({ list }: { list: GlobalList }) {
   return (
     <Table striped withTableBorder>
       <Table.Tbody>
-        {list.list.map((item) => (
+        {list.list ? list.list.map((item) => (
           <Table.Tr key={item.timestamp}>
             <Table.Td>{mapFormat(item.type)}</Table.Td>
             <Table.Td>
@@ -84,7 +84,7 @@ export default function List({ list }: { list: GlobalList }) {
             </Table.Td>
             <Table.Td>{new Date(item.timestamp).toDateString()}</Table.Td>
           </Table.Tr>
-        ))}
+        )) : <tr><td colSpan={8}>No items found</td></tr>}
       </Table.Tbody>
     </Table>
   );

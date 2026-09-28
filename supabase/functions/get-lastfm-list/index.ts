@@ -64,7 +64,7 @@ function formatList(data, type = 'music') {
         id: item.mbid || item.date.uts,
         title: item.name,
         image: item.image[1]["#text"] || null,
-        timestamp: item.date.uts * 1000,
+        timestamp: item.date ? item.date.uts * 1000 : new Date(),
         url: item.url,
         artist: item.artist["#text"],
         status,
