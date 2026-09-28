@@ -46,6 +46,7 @@ Deno.serve(async (req) => {
       },
     });
   } catch (e) {
+    console.error('Error fetching Last.fm data:', e);
     return new Response('Internal Server Error', {
       status: 500,
     });
@@ -56,20 +57,26 @@ function formatList(data, type = 'music') {
   const res: GlobalList = {
     service: 'lastfm',
     list: data.map((item) => {
+      console.log('item', item);
       const type = 'music'
       const status = 'played'
       const album = item.album["#text"]
-      return {
+      const date = item.date ? new Date(item.date.uts * 1000) : new Date();
+
+      const res = {
         type,
-        id: item.mbid || item.date.uts,
+        id: item.mbid || date ,
         title: item.name,
         image: item.image[1]["#text"] || null,
-        timestamp: item.date ? item.date.uts * 1000 : new Date(),
+        timestamp: date,
         url: item.url,
         artist: item.artist["#text"],
         status,
         album,
-      };
+      }
+      console.log('item-sorted', res);
+
+      return res;
     }),
   };
   return res;
