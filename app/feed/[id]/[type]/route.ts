@@ -6,12 +6,12 @@ import { createClient } from '@/lib/supabase/server';
 export function GET(_req: NextRequest, context: { params: Promise<{ id: string; type: string }> }) {
   return context.params.then(async ({ id, type }) => {
     const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) {
-      await supabase.auth.signInAnonymously();
-    }
+    // const {
+    //   data: { user },
+    // } = await supabase.auth.getUser();
+    // if (!user) {
+    //   await supabase.auth.signInAnonymously();
+    // }
     const list = await getCombinedList(id);
     const feed = new Feed({
       title: 'Media Tracker',

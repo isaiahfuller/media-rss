@@ -8,6 +8,11 @@ export async function createClient() {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
+      global:{
+        headers: {
+          'x-supabase-auth-token': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
+        },
+      },
       cookies: {
         getAll() {
           return cookieStore.getAll();

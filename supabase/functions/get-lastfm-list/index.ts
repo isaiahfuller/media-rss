@@ -19,18 +19,24 @@ Deno.serve(async (req) => {
       headers: corsHeaders,
     });
   }
-  const authHeader = req.headers.get('Authorization')!;
 
-  const token = authHeader.replace('Bearer ', '');
-  const { data, error } = await supabase.auth.getClaims(token);
-  if (error) {
-    return Response.json(
-      { msg: 'Invalid JWT' },
-      {
-        status: 401,
-      }
-    );
+  const publishableKey = JSON.parse(Deno.env.get('SUPABASE_PUBLISHABLE_KEYS')).default;
+  const sbToken = req.headers.get('x-supabase-auth-token');
+
+  if(!sbToken || sbToken !== publishableKey){
+    const authHeader = req.headers.get('Authorization')!;
+    const token = authHeader.replace('Bearer ', '');
+    const { _, error } = await supabase.auth.getClaims(token);
+    if (error) {
+      return Response.json(
+        { msg: 'Invalid JWT' },
+        {
+          status: 401,
+        }
+      );
+    }
   }
+
   try {
     const { username } = await req.json();
     const url = `http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${username}&api_key=${Deno.env.get('LASTFM_CLIENT_ID')}&format=json`;
@@ -61,7 +67,7 @@ function formatList(data, type = 'music') {
       const type = 'music'
       const status = 'played'
       const album = item.album["#text"]
-      const date = item.date ? new Date(item.date.uts * 1000) : new Date();
+      const date = item.date ? item.date.uts * 1000 : Date.now();
 
       const res = {
         type,

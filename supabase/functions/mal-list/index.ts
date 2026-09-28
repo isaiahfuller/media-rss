@@ -22,18 +22,24 @@ Deno.serve(async (req) => {
       headers: corsHeaders,
     });
   }
-  const authHeader = req.headers.get('Authorization')!;
+  
+  const publishableKey = JSON.parse(Deno.env.get('SUPABASE_PUBLISHABLE_KEYS')).default;
+  const sbToken = req.headers.get('x-supabase-auth-token');
 
-  const token = authHeader.replace('Bearer ', '');
-  const { data, error } = await supabase.auth.getClaims(token);
-  if (error) {
-    return Response.json(
-      { msg: 'Invalid JWT' },
-      {
-        status: 401,
-      }
-    );
+  if(!sbToken || sbToken !== publishableKey){
+    const authHeader = req.headers.get('Authorization')!;
+    const token = authHeader.replace('Bearer ', '');
+    const { _, error } = await supabase.auth.getClaims(token);
+    if (error) {
+      return Response.json(
+        { msg: 'Invalid JWT' },
+        {
+          status: 401,
+        }
+      );
+    }
   }
+
   try {
     const { username } = await req.json();
     const animeResponse = await fetch(
