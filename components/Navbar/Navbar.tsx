@@ -1,11 +1,12 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Anchor, Burger, Flex, Group, Menu, NavLink, Text } from '@mantine/core';
+import { Burger, Container, Flex, Group, Menu, NavLink, Text } from '@mantine/core';
 import { useDisclosure, useViewportSize } from '@mantine/hooks';
 import AniList from '@/img/AniList.svg';
 import Lastfm from '@/img/Lastfm.svg';
@@ -15,8 +16,20 @@ import { createClient } from '@/lib/supabase/client';
 export default function Navbar() {
   const [opened, { toggle }] = useDisclosure();
   const { width } = useViewportSize();
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const supabase = createClient();
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsLoggedIn(Boolean(session));
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
   return (
-    <>
+    <Container>
       <Flex
         justify="space-between"
         align={{ base: 'flex-start', sm: 'center' }}
@@ -30,89 +43,101 @@ export default function Navbar() {
           <Text>Media RSS</Text>
         </Group>
         {/* Middle */}
-        <Flex
-          display={{ base: opened ? 'flex' : 'none', sm: 'flex' }}
-          direction={{ base: 'column', sm: 'row' }}
-          align={{ base: 'flex-start', sm: 'center' }}
-        >
-          <NavLink component={Link} href="/" variant="subtle" label="Home" />
-          {width >= 768 ? (
-            <Menu trigger="hover" openDelay={100} closeDelay={400}>
-              <Menu.Target>
+        {isLoggedIn ? (
+          <Flex
+            display={{ base: opened ? 'flex' : 'none', sm: 'flex' }}
+            direction={{ base: 'column', sm: 'row' }}
+            align={{ base: 'flex-start', sm: 'center' }}
+          >
+            <NavLink component={Link} href="/" variant="subtle" label="Home" />
+            {width >= 768 ? (
+              <Menu trigger="hover" openDelay={100} closeDelay={400}>
+                <Menu.Target>
+                  <NavLink
+                    variant="subtle"
+                    rightSection={<FontAwesomeIcon icon={faChevronDown} />}
+                    label="Sources"
+                  />
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Item
+                    component={Link}
+                    href="/source/lastfm"
+                    leftSection={<Image src={Lastfm} alt="Last.fm" width={20} height={20} />}
+                  >
+                    Last.fm
+                  </Menu.Item>
+                  <Menu.Item
+                    component={Link}
+                    href="/source/anilist"
+                    leftSection={<Image src={AniList} alt="AniList" width={20} height={20} />}
+                  >
+                    AniList
+                  </Menu.Item>
+                  <Menu.Item
+                    component={Link}
+                    href="/source/myanimelist"
+                    leftSection={
+                      <Image src={MyAnimeList} alt="MyAnimeList" width={20} height={20} />
+                    }
+                  >
+                    MyAnimeList
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+            ) : (
+              <>
                 <NavLink
-                  variant="subtle"
-                  rightSection={<FontAwesomeIcon icon={faChevronDown} />}
-                  label="Sources"
-                />
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item
                   component={Link}
                   href="/source/lastfm"
+                  variant="subtle"
+                  label="Last.fm"
                   leftSection={<Image src={Lastfm} alt="Last.fm" width={20} height={20} />}
-                >
-                  Last.fm
-                </Menu.Item>
-                <Menu.Item
+                />
+                <NavLink
                   component={Link}
                   href="/source/anilist"
+                  variant="subtle"
+                  label="AniList"
                   leftSection={<Image src={AniList} alt="AniList" width={20} height={20} />}
-                >
-                  AniList
-                </Menu.Item>
-                <Menu.Item
+                />
+                <NavLink
                   component={Link}
                   href="/source/myanimelist"
+                  variant="subtle"
+                  label="MyAnimeList"
                   leftSection={<Image src={MyAnimeList} alt="MyAnimeList" width={20} height={20} />}
-                >
-                  MyAnimeList
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
-          ) : (
-            <>
-              <NavLink
-                component={Link}
-                href="/source/lastfm"
-                variant="subtle"
-                label="Last.fm"
-                leftSection={<Image src={Lastfm} alt="Last.fm" width={20} height={20} />}
-              />
-              <NavLink
-                component={Link}
-                href="/source/anilist"
-                variant="subtle"
-                label="AniList"
-                leftSection={<Image src={AniList} alt="AniList" width={20} height={20} />}
-              />
-              <NavLink
-                component={Link}
-                href="/source/myanimelist"
-                variant="subtle"
-                label="MyAnimeList"
-                leftSection={<Image src={MyAnimeList} alt="MyAnimeList" width={20} height={20} />}
-              />
-            </>
-          )}
-        </Flex>
+                />
+              </>
+            )}
+          </Flex>
+        ) : (
+          <div />
+        )}
         {/* Right/Bottom */}
         <Flex
           display={{ base: opened ? 'flex' : 'none', sm: 'flex' }}
           direction={{ base: 'column', sm: 'row' }}
           align={{ base: 'flex-start', sm: 'center' }}
         >
-          <NavLink component={Link} href="/settings" variant="subtle" label="Settings" />
-          <NavLink
-            variant="subtle"
-            label="Logout"
-            onClick={() => {
-              const supabase = createClient();
-              supabase.auth.signOut();
-              redirect('/login');
-            }}
-          />
+          {isLoggedIn ? (
+            <>
+              <NavLink component={Link} href="/settings" variant="subtle" label="Settings" />
+              <NavLink
+                variant="subtle"
+                label="Logout"
+                onClick={() => {
+                  const supabase = createClient();
+                  supabase.auth.signOut();
+                  redirect('/login');
+                }}
+              />
+            </>
+          ) : (
+            !isLoggedIn && <NavLink component={Link} href="/login" variant="subtle" label="Login" />
+          )}
         </Flex>
       </Flex>
-    </>
+    </Container>
   );
 }

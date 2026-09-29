@@ -1,17 +1,12 @@
+import { GlobalList } from '@/interfaces/globalList';
 import { getAnilistList } from './anilist';
 import { getLastfmList } from './lastfm';
 import { getMalList } from './mal';
 import { createClient } from './supabase/server';
 
 export default async function getCombinedList(id: string) {
-  const supabase = await createClient({
-    global: {
-      headers: {
-        'x-supabase-auth-token': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
-      },
-    },
-  });
-  const list = [];
+  const supabase = await createClient();
+  const list: GlobalList['list'] = [];
   let anilistId: string | undefined, malId: string | undefined;
 
   // const { data: identities, error } = await supabase.auth.getUserIdentities();
@@ -34,7 +29,10 @@ export default async function getCombinedList(id: string) {
     },
   });
 
-  console.log(data, error);
+  if (error) {
+    throw error;
+  }
+
   for (const identity of data.providers) {
     console.log(identity.provider, identity.identity_data);
     if (identity.provider === 'custom:anilist') {
@@ -43,10 +41,6 @@ export default async function getCombinedList(id: string) {
     if (identity.provider === 'custom:myanimelist') {
       malId = identity.identity_data?.preferred_username;
     }
-  }
-
-  if (error) {
-    throw error;
   }
 
   // if (data && data.providers) {
@@ -59,7 +53,6 @@ export default async function getCombinedList(id: string) {
   //     }
   //   }
   // }
-
 
   const { data: lastfmUsername } = await supabase
     .from('lastfm_user')

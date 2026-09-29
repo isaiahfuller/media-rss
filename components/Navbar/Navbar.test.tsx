@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { fireEvent, screen } from '@testing-library/react';
+import { act, fireEvent, screen } from '@testing-library/react';
 import { useViewportSize } from '@mantine/hooks';
 import { createClient } from '@/lib/supabase/client';
 import { render } from '@/test-utils';
@@ -20,15 +20,41 @@ jest.mock('next/navigation', () => ({
 
 describe('Navbar', () => {
   const mockSignOut = jest.fn();
+  const mockUnsubscribe = jest.fn();
+  let authListener: (event: string, session: object | null) => void;
+  const mockOnAuthStateChange = jest.fn((callback) => {
+    authListener = callback;
+    callback('INITIAL_SESSION', { user: { id: 'test-user' } });
+    return { data: { subscription: { unsubscribe: mockUnsubscribe } } };
+  });
   const mockSupabase = {
     auth: {
       signOut: mockSignOut,
+      onAuthStateChange: mockOnAuthStateChange,
     },
   };
 
   beforeEach(() => {
     (createClient as jest.Mock).mockReturnValue(mockSupabase);
     (useViewportSize as jest.Mock).mockReturnValue({ width: 1024 });
+  });
+
+  it('updates navigation when login status changes and unsubscribes on unmount', () => {
+    const { unmount } = render(<Navbar />);
+    expect(screen.getByText('Settings')).toBeInTheDocument();
+
+    act(() => authListener('SIGNED_OUT', null));
+    expect(screen.getByText('Login').closest('a')).toHaveAttribute('href', '/login');
+    expect(screen.queryByText('Settings')).not.toBeInTheDocument();
+    expect(screen.queryByText('Logout')).not.toBeInTheDocument();
+
+    act(() => authListener('SIGNED_IN', { user: { id: 'test-user' } }));
+    expect(screen.getByText('Logout')).toBeInTheDocument();
+    expect(screen.queryByText('Login')).not.toBeInTheDocument();
+
+    mockUnsubscribe.mockClear();
+    unmount();
+    expect(mockUnsubscribe).toHaveBeenCalledTimes(1);
   });
 
   it('renders branding', () => {

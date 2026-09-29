@@ -18,10 +18,10 @@ export default function IDField({ id }: { id: string }) {
     <Flex w="50vw">
       <TextInput
         w="inherit"
-        value={`${pathname}/media-rss/feed/${id}/${format}`}
+        value={`${pathname}/feed/${id}/${format}`}
         disabled
         rightSection={
-          <CopyButton value={`${pathname}/media-rss/feed/${id}/${format}`}>
+          <CopyButton value={`${pathname}/feed/${id}/${format}`}>
             {({ copied, copy }) => (
               <FontAwesomeIcon icon={copied ? faCheck : faCopy} onClick={copy} />
             )}

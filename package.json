@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3245",
+    "dev": "next dev --webpack -p 3245",
     "build": "next build",
     "analyze": "ANALYZE=true next build",
     "start": "next start -p 3245",
