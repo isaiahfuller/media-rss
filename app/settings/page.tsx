@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Center, Container, Divider, Group, Stack, Text, Title } from '@mantine/core';
+import { Center, Container, Divider, Grid, GridCol, Stack, Text, Title } from '@mantine/core';
 import AccountDeleteButton from '@/components/AuthButtons/AccountDelete';
 import AuthButton from '@/components/AuthButtons/AuthButton';
 import AniList from '@/img/AniList.svg';
@@ -19,33 +19,22 @@ export default async function Settings() {
   }
   const { data: identities } = await supabase.auth.getUserIdentities();
   const linkedProviders = identities?.identities?.map((identity) => identity.provider);
-  // if (identities && identities.identities) {
-  //   for (const identity of identities.identities) {
-  //     if (identity.provider === 'custom:anilist') {
-  //       console.log('AniList linked');
-  //       console.log(identity.identity_data);
-  //     }
-  //     if (identity.provider === 'custom:myanimelist') {
-  //       console.log('MyAnimeList linked');
-  //       console.log(identity.identity_data);
-  //     }
-  //     if (identity.provider === 'github') {
-  //       console.log('GitHub linked');
-  //       console.log(identity.identity_data);
-  //     }
-  //   }
-  // }
+
   return (
     <Container>
       <Center>
         <Text size="xl">Settings</Text>
       </Center>
       <Divider />
-      <Stack>
-        <Title>Link your accounts</Title>
-        <Text>Link your social accounts to get started</Text>
-        <Group>
+      <Grid align="center">
+        <GridCol span={12}>
+          <Title>Link your accounts</Title>
+          <Text>Link your social accounts to get started</Text>
+        </GridCol>
+        <GridCol span={4}>
           <Text>AniList</Text>
+        </GridCol>
+        <GridCol span={8}>
           {linkedProviders?.includes('custom:anilist') ? (
             <AuthButton
               loggedIn
@@ -64,9 +53,11 @@ export default async function Settings() {
               providerName="AniList"
             />
           )}
-        </Group>
-        <Group>
+        </GridCol>
+        <GridCol span={4}>
           <Text>MyAnimeList</Text>
+        </GridCol>
+        <GridCol span={8}>
           {linkedProviders?.includes('custom:myanimelist') ? (
             <AuthButton
               loggedIn
@@ -85,9 +76,11 @@ export default async function Settings() {
               providerName="MyAnimeList"
             />
           )}
-        </Group>
-        <Group>
+        </GridCol>
+        <GridCol span={4}>
           <Text>GitHub</Text>
+        </GridCol>
+        <GridCol span={8}>
           {linkedProviders?.includes('github') ? (
             <AuthButton
               loggedIn
@@ -106,8 +99,8 @@ export default async function Settings() {
               providerName="GitHub"
             />
           )}
-        </Group>
-      </Stack>
+        </GridCol>
+      </Grid>
       <Divider />
       <Stack>
         <Title c="red">Danger Zone</Title>
