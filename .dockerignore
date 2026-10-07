@@ -1,0 +1,11 @@
+.git
+.dirac-cache
+.next
+node_modules
+.yarn/*
+!.yarn/releases
+.env*
+coverage
+storybook-static
+*.log
+*.tsbuildinfo
