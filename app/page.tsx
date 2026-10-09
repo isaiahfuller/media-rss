@@ -21,7 +21,7 @@ export default async function HomePage() {
   return (
     <>
       <Navbar />
-      <Container>
+      <Container size="md" py="md">
         <Stack>
           <Center>
             <IDField id={user?.id || ''} />

@@ -1,10 +1,20 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Button, Center, Divider, Group, Loader, Stack, TextInput } from '@mantine/core';
+import Image from 'next/image';
+import { Button, Center, Divider, Group, Loader, Stack, TextInput, Title } from '@mantine/core';
+import AniList from '@/img/AniList.svg';
+import Lastfm from '@/img/Lastfm.svg';
+import MyAnimeList from '@/img/MyAnimeList.svg';
 import { GlobalList } from '@/interfaces/globalList';
 import { createClient } from '@/lib/supabase/client';
 import List from '../List/List';
+
+const sourceOptions = [
+  { id: 'anilist', name: 'AniList', logo: AniList },
+  { id: 'myanimelist', name: 'MyAnimeList', logo: MyAnimeList },
+  { id: 'lastfm', name: 'Last.fm', logo: Lastfm },
+];
 
 export default function Source({
   source,
@@ -18,6 +28,7 @@ export default function Source({
   getAnilistList: () => Promise<GlobalList>;
   getLastfmList: (username: string) => Promise<GlobalList>;
 }) {
+  const sourceDetails = sourceOptions.find(({ id }) => id === source[0]);
   const [username, setUsername] = useState<string>('');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [externalId, setExternalId] = useState<number | null>(null); // Out of currently planned sources, only anilist uses ids
@@ -129,7 +140,12 @@ export default function Source({
   return (
     <Stack>
       <form onSubmit={handleSubmit}>
-        <h1>Source: {source}</h1>
+        <Center>
+          <Group gap="sm" mb="md">
+            {sourceDetails && <Image src={sourceDetails.logo} alt="" width={32} height={32} />}
+            <Title order={1}>{sourceDetails?.name ?? source[0]}</Title>
+          </Group>
+        </Center>
         {source[0] === 'anilist' || source[0] === 'myanimelist' ? null : (
           <Center>
             <Group align="flex-end">
