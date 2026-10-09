@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Center, Container, Divider, Grid, GridCol, Stack, Text, Title } from '@mantine/core';
+import { Container, Divider, Grid, GridCol, Stack, Text, Title } from '@mantine/core';
 import AccountDeleteButton from '@/components/AuthButtons/AccountDelete';
 import AuthButton from '@/components/AuthButtons/AuthButton';
 import AniList from '@/img/AniList.svg';
@@ -21,11 +21,7 @@ export default async function Settings() {
   const linkedProviders = identities?.identities?.map((identity) => identity.provider);
 
   return (
-    <Container>
-      <Center>
-        <Text size="xl">Settings</Text>
-      </Center>
-      <Divider />
+    <Container size="md" py="md">
       <Grid align="center">
         <GridCol span={12}>
           <Title>Link your accounts</Title>
@@ -101,7 +97,7 @@ export default async function Settings() {
           )}
         </GridCol>
       </Grid>
-      <Divider />
+      <Divider my={8} />
       <Stack>
         <Title c="red">Danger Zone</Title>
         <Text>Warning: This will delete your account and all data associated with it.</Text>
